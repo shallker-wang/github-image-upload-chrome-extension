@@ -1,0 +1,29 @@
+{
+  "name": "Github Issue Image Upload",
+  "version": "1.0",
+  "description": "Upload and insert images on Github issue.",
+  "background": { "scripts": ["background.js"] },
+  "page_action" :
+  {
+    "default_icon" : "icon-19.png",
+    "default_title" : "There's a 'G' in this URL!"
+  },
+  "permissions" : [
+    "tabs"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": ["base64.js", "jquery-1.8.2.min.js", "image_upload.js"],
+      "css": ["main.css"]
+    }
+  ],
+  "icons" : {
+    "48" : "icon-48.png",
+    "128" : "icon-128.png"
+  },
+  "manifest_version": 2
+}
