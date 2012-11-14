@@ -16,8 +16,8 @@
   "content_scripts": [
     {
       "matches": [
-        "http://github.com/shallker-wang/hello_world/issues/new",
-        "https://github.com/shallker-wang/hello_world/issues/new"
+        "http://github.com/*/*/issues/new",
+        "https://github.com/*/*/issues/new"
       ],
       "js": ["app.js", "jquery-1.8.2.min.js", "image_upload.js"],
       "css": ["main.css"]
