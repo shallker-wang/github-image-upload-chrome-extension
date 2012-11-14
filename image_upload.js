@@ -22,44 +22,36 @@ $(function() {
 		ev.preventDefault();
 		files = ev.dataTransfer.files;
 		if (files.length > 0) {
-			file_upload(files[0]);
+			fileUpload(files[0]);
 		}
 	}
 
-	// upload file to the server
-	function file_upload(file) {
+	// create a document on couchDB
+	function fileUpload(file) {
 		app.file = file;
 		var host = 'http://106.187.36.132:4242/profero';
-		var couchDocument = URLComponent;
-		var xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function() {
-			if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 201)) {
-				sendStandaloneAttachment(JSON.parse(xhr.responseText));
-			}
+		var doc = app.post(host, URLComponent, 'json');
+		if (doc) {
+			sendStandaloneAttachment(host, doc);
 		}
-		xhr.open('POST', host);
-		xhr.send(JSON.stringify(couchDocument));
+	}
 
-		function sendStandaloneAttachment(documentInfo) {
-			var attachHost = host+'/'+documentInfo.id+'/'+app.file.name+'?rev='+documentInfo.rev;
-			var xhr = new XMLHttpRequest();
-			xhr.onreadystatechange = function() {
-				if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 201)) {
-					var imageURL = host+'/'+documentInfo.id+'/'+app.file.name;
-					insertImageURL(imageURL);
-				}
-			}
-			xhr.open('PUT', attachHost);
-			xhr.setRequestHeader('Content-type', app.file.type);
-			xhr.send(app.file);
+	// send the image as an attachment to the document
+	function sendStandaloneAttachment(host, doc) {
+		var attchHost = host+'/'+doc.id+'/'+app.file.name+'?rev='+doc.rev;
+		var response = app.put(attchHost, app.file, 'binary', 
+			{'Content-type': app.file.type});
+		if (response) {
+			var imageURL = host+'/'+doc.id+'/'+app.file.name;
+			insertImageURL(imageURL);
 		}
+	}
 
-		function insertImageURL(url) {
-			var content = $('#issue_body').val();
-			content += "\n"+"!["+app.file.name+"]("+url+")";
-			$('#issue_body').val(content);
-		}
-
+	// insert markdown format image to the current textarea
+	function insertImageURL(url) {
+		var content = $('#issue_body').val();
+		content += "\n"+"!["+app.file.name+"]("+url+")";
+		$('#issue_body').val(content);
 	}
 
 

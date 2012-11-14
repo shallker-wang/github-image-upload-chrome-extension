@@ -6,3 +6,8 @@
 	padding: 5px;
 	text-align: center;
 }
+
+.drag-over {
+	background-color: #FFFEEE;
+	border: 3px dashed #555;
+}
