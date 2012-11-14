@@ -40,8 +40,6 @@
             }
         }
         xhr.open(method, obj.url, false);
-        console.log(header);
-        console.log(data);
         for (var i in header) {
             xhr.setRequestHeader(i, header[i]);
         }

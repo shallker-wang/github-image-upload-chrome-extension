@@ -9,13 +9,25 @@ $(function() {
 	}
 
 	// append image upload elements on issue creating page
-	var imageUploadHtml = '<h3>Add Image</h3><div id="issue-image-upload" class="drag-drop"><h4>Drag image here.<h4></div>';
+	var imageUploadHtml = '<h3>Add Image</h3><div id="issue-image-upload" class="drag-drop"></div><span class="drag-prompt">Drag image here.<span>';
 	var sideBar = $('.column.sidebar');
 	$(sideBar).append(imageUploadHtml);
 
 	// listen drop action
-	var dragDrop = document.getElementById('issue-image-upload');
-	dragDrop.addEventListener('drop', dropEvent);
+	eleDropZone = document.getElementById('issue-image-upload');
+	eleDropZone.addEventListener('dragenter', dragenterEvent)
+	eleDropZone.addEventListener('dragleave', dragleaveEvent)
+	eleDropZone.addEventListener('drop', dropEvent);
+
+
+	function dragenterEvent(ev) {
+		$(eleDropZone).addClass('drag-over');
+		$('.drag-prompt').html('Drop the image.');
+	}
+	function dragleaveEvent(ev) {
+		$(eleDropZone).removeClass('drag-over');
+		$('.drag-prompt').html('Drag image here.');
+	}
 
 	// drop event callback
 	function dropEvent(ev) {
@@ -24,6 +36,7 @@ $(function() {
 		if (files.length > 0) {
 			fileUpload(files[0]);
 		}
+		dragleaveEvent();
 	}
 
 	// create a document on couchDB
