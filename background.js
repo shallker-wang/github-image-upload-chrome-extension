@@ -9,12 +9,6 @@ function checkForValidUrl(tabId, changeInfo, tab) {
     // ... show the page action.
     chrome.pageAction.show(tabId);
   }
-  console.log(tabId)
-  console.log(changeInfo)
-  console.log(tab)
-  console.log(chrome.tabs);
-
-  // console.log( chrome.tabs );
 };
 
 // Listen for any changes to the URL of any tab.

@@ -9,15 +9,17 @@
     "default_title" : "There's a 'G' in this URL!"
   },
   "permissions" : [
-    "tabs"
+    "tabs",
+    "http://*/*",
+    "https://*/*"
   ],
   "content_scripts": [
     {
       "matches": [
-        "http://*/*",
-        "https://*/*"
+        "http://github.com/shallker-wang/hello_world/issues/new",
+        "https://github.com/shallker-wang/hello_world/issues/new"
       ],
-      "js": ["base64.js", "jquery-1.8.2.min.js", "image_upload.js"],
+      "js": ["app.js", "jquery-1.8.2.min.js", "image_upload.js"],
       "css": ["main.css"]
     }
   ],

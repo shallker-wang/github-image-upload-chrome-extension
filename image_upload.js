@@ -1,6 +1,4 @@
 $(function() {
-	window.app = {};
-	app.host = 'http://106.187.36.132:4242/profero';
 
 	// get issue information from current url address
 	var pathNameSplit = window.location.pathname.split('/');
@@ -17,49 +15,51 @@ $(function() {
 
 	// listen drop action
 	var dragDrop = document.getElementById('issue-image-upload');
-	dragDrop.addEventListener('drop', drop);
+	dragDrop.addEventListener('drop', dropEvent);
 
 	// drop event callback
-	function drop(ev) {
+	function dropEvent(ev) {
 		ev.preventDefault();
 		files = ev.dataTransfer.files;
 		if (files.length > 0) {
 			file_upload(files[0]);
 		}
-		console.log(files);
 	}
 
 	// upload file to the server
 	function file_upload(file) {
 		app.file = file;
-        var fileReader = new FileReader();
-        fileReader.onload = function(ev) {
-        	// console.log(ev);
-        	// return;
-        	// console.log(app);
-        	// return;
-        	var fileLength = ev.loaded || ev.total;
-        	var timestamp = ev.timeStamp;
-        	var binaryString = ev.target.result;
-        	var randomId = Math.round(Math.random()*10000000000000);
-        	var fileName = app.file.name;
-        	var fileType = app.file.type;
-	        var data = {
-	        	'_id': randomId+fileName,
-	        	'_attachments': {
-	        		'newfile': {
-	        			"content_type": "image\/png",
-	        			"data": Base64.encode(binaryString)
-	        		}
-	        	}
-	        }
-	        var couchData = JSON.stringify(data);
-			var ajax = new XMLHttpRequest();
-			var host = 'http://106.187.36.132:4242/profero';
-			ajax.open("POST", host, true);
-	        ajax.send(couchData);
-        }
-        fileReader.readAsBinaryString(file);
+		var host = 'http://106.187.36.132:4242/profero';
+		var couchDocument = URLComponent;
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 201)) {
+				sendStandaloneAttachment(JSON.parse(xhr.responseText));
+			}
+		}
+		xhr.open('POST', host);
+		xhr.send(JSON.stringify(couchDocument));
+
+		function sendStandaloneAttachment(documentInfo) {
+			var attachHost = host+'/'+documentInfo.id+'/'+app.file.name+'?rev='+documentInfo.rev;
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 201)) {
+					var imageURL = host+'/'+documentInfo.id+'/'+app.file.name;
+					insertImageURL(imageURL);
+				}
+			}
+			xhr.open('PUT', attachHost);
+			xhr.setRequestHeader('Content-type', app.file.type);
+			xhr.send(app.file);
+		}
+
+		function insertImageURL(url) {
+			var content = $('#issue_body').val();
+			content += "\n"+"!["+app.file.name+"]("+url+")";
+			$('#issue_body').val(content);
+		}
+
 	}
 
 
