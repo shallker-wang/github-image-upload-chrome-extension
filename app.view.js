@@ -5,6 +5,7 @@
         this.dropZoneID = 'issue-new-drop-zone';
 
         this.addImageURLOnNewIssue = function(url, name) {
+            $('body').append('<img class="img-preload" src="'+url+'">');
             $("#issue_body").get(0).value += "\n"+"!["+name+"]("+url+")";
         }
 

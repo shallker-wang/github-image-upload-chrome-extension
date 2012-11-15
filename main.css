@@ -32,3 +32,11 @@
     margin-top: -37px;
     position: relative;
 }
+
+.img-preload {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    top: 99999px;
+    left: 99999px;
+}

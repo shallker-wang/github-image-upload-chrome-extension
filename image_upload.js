@@ -35,13 +35,13 @@ $(function() {
         if (files.length < 0) {
             return;
         }
-        // fileUpload(files[0]);
         app.file = files[0];
         var fileReader = new FileReader();
         fileReader.onload = function(ev) {
             app.view.hideDropZonePrompt();
             app.view.addImagePreview(ev.target.result);
             app.view.addProgressBar();
+            // upload image and insert markdown format url
             app.model.addDocument(URLComponent, function(evLoad) {
                 app.model.addAttachment(
                     JSON.parse(this.responseText),
@@ -61,11 +61,6 @@ $(function() {
             });
         }
         fileReader.readAsDataURL(app.file);
-    }
-
-    // upload image and insert markdown format url
-    function fileUpload(file) {
-        app.file = file;
     }
 
 })
