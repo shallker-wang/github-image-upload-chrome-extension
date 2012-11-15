@@ -28,14 +28,27 @@ $(function() {
         app.view.dropZoneDragLeave();
     }
 
+
     // drop event callback
     function dropEvent(ev) {
         ev.preventDefault();
-        files = ev.dataTransfer.files;
-        if (files.length < 0) {
+        var files = ev.dataTransfer.files;
+        app.files = [];
+        for (var i=0; i<files.length; i++) {
+            app.files.push(files[i]);
+        }
+        app.filesUpload();
+    }
+
+    app.filesUpload = function() {
+        if (app.files.length < 1) {
             return;
         }
-        app.file = files[0];
+        readAndUpload(app.files.shift());
+    }
+    
+    function readAndUpload(file) {
+        app.file = file;
         var fileReader = new FileReader();
         fileReader.onload = function(ev) {
             app.view.hideDropZonePrompt();
@@ -51,6 +64,7 @@ $(function() {
                         var imageURL = app.model.couchDB+'/'+doc.id+'/'+app.file.name;
                         app.view.addImageURLOnNewIssue(imageURL, app.file.name);
                         app.view.dropZoneReset();
+                        app.filesUpload();
                     },
                     function(evUploadProgress) {
                         var percent = evUploadProgress.loaded / evUploadProgress.total;
@@ -62,5 +76,6 @@ $(function() {
         }
         fileReader.readAsDataURL(app.file);
     }
+    
 
 })
