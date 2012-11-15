@@ -6,50 +6,33 @@
     app.prototype = {
         redirect: function(url) {
             window.location.href = url;
-        },
-        request: function(method, url, data, dataType, header) {
-            return this.ajax({
-                method: method,
-                url: url,
-                data: data,
-                dataType: dataType,
-                header: header
-            });
-        },
-        get: function(url, data, dataType, header) {
-            return this.request('GET', url, data, dataType, header);
-        },
-        put: function(url, data, dataType, header) {
-            return this.request('PUT', url, data, dataType, header);
-        },
-        post: function(url, data, dataType, header) {
-            return this.request('POST', url, data, dataType, header);
         }
     }
 
-    app.prototype.ajax = function(obj) {
-        var header = obj.header || {};
-        var method = obj.method || 'GET';
-        var data = obj.data || '';
-        if (obj.dataType == 'json') {
-            var data = JSON.stringify(data);
-        }
+    app.prototype.xhr = function(para) {
+        var url = para.url;
+        var data = para.data || '';
+        var async = para.async || true;
+        var header = para.header || {};
+        var method = para.method || 'GET';
+        var eventListener = para.eventListener || {};
+        var uploadEventListener = para.uploadEventListener || {};
+        
         xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 201)) {
-            }
+        for (var ev in eventListener) {
+            xhr.addEventListener(ev, eventListener[ev]);
         }
-        xhr.open(method, obj.url, false);
-        for (var i in header) {
-            xhr.setRequestHeader(i, header[i]);
+        for (var ev in uploadEventListener) {
+            xhr.upload.addEventListener(ev, uploadEventListener[ev]);
         }
-        xhr.send(data)
-        if (obj.dataType == 'json') {
-            return JSON.parse(xhr.responseText);
+        xhr.open(method, url, async);
+        for (var h in header) {
+            xhr.setRequestHeader(h, header[h]);
         }
+        xhr.send(data);
         return xhr.responseText;
     }
-
+    
     window.app = new app();
 
 })();

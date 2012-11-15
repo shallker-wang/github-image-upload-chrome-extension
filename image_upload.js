@@ -39,33 +39,16 @@ $(function() {
 		dragleaveEvent();
 	}
 
-	// create a document on couchDB
+	// upload image and insert markdown format url
 	function fileUpload(file) {
 		app.file = file;
-		var host = 'http://106.187.36.132:4242/profero';
-		var doc = app.post(host, URLComponent, 'json');
-		if (doc) {
-			sendStandaloneAttachment(host, doc);
-		}
+		app.model.addDocument(URLComponent, function(ev) {
+			app.model.addAttachment(JSON.parse(this.responseText), app.file, function(ev) {
+				var doc = JSON.parse(this.responseText);
+				var imageURL = app.model.couchDB+'/'+doc.id+'/'+app.file.name;
+				app.view.addImageURLOnNewIssue(imageURL, app.file.name);
+			})
+		});
 	}
-
-	// send the image as an attachment to the document
-	function sendStandaloneAttachment(host, doc) {
-		var attchHost = host+'/'+doc.id+'/'+app.file.name+'?rev='+doc.rev;
-		var response = app.put(attchHost, app.file, 'binary', 
-			{'Content-type': app.file.type});
-		if (response) {
-			var imageURL = host+'/'+doc.id+'/'+app.file.name;
-			insertImageURL(imageURL);
-		}
-	}
-
-	// insert markdown format image to the current textarea
-	function insertImageURL(url) {
-		var content = $('#issue_body').val();
-		content += "\n"+"!["+app.file.name+"]("+url+")";
-		$('#issue_body').val(content);
-	}
-
 
 })
