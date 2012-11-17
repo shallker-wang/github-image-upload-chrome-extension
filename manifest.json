@@ -16,11 +16,23 @@
   "content_scripts": [
     {
       "matches": [
-        "http://github.com/*/*/issues/new",
-        "https://github.com/*/*/issues/new"
+        "http://github.com/*",
+        "https://github.com/*",
+        "http://*.github.com/*",
+        "https://*.github.com/*"
       ],
-      "js": ["app.js", "app.model.js", "app.view.js", "jquery-1.8.2.min.js", "image_upload.js"],
-      "css": ["bootstrap.min.css", "main.css"]
+      "js": ["jquery-1.8.2.min.js", "app.js", "app.model.js", "app.view.js"],
+      "css": ["bootstrap.my.css", "main.css"]
+    },
+    {
+      "matches": [
+        "http://github.com/*/*/issues/*",
+        "https://github.com/*/*/issues/*",
+        "http://*.github.com/*/*/issues/*",
+        "https://*.github.com/*/*/issues/*"
+      ],
+      "js": ["issue_new.js", "issue_edit.js"],
+      "css": ["issue_new.css", "issue_edit.css"]
     }
   ],
   "icons" : {

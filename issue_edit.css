@@ -1,0 +1,14 @@
+.drop-zone-wrapper.drop-zone-issue-edit {
+    position: absolute;
+    margin-left: 820px;
+}
+
+.drop-zone-issue-edit .drop-zone {
+    width: 84px !important;
+}
+
+.drop-zone-issue-edit .drop-zone-prompt {
+    text-align: center;
+    margin-top: -58px !important;
+    margin-left: 0px !important;
+}

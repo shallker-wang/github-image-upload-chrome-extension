@@ -1,5 +1,10 @@
 $(function() {
 
+    if (window.location.pathname.indexOf('new') == -1) {
+        return;
+    }
+    // console.log('issue_new.js');
+
     // get issue information from current url address
     var pathNameSplit = window.location.pathname.split('/');
     var URLComponent = {
@@ -9,7 +14,7 @@ $(function() {
     }
 
     // append image upload elements on issue creating page
-    var imageUploadHtml = '<h3>Add Image</h3><div id="issue-new-drop-zone" class="drop-zone"></div><span class="drop-zone-prompt">Drag image here.<span>';
+    var imageUploadHtml = '<div class="drop-zone-wrapper"><h3>Add Image</h3><div id="issue-new-drop-zone" class="drop-zone"></div><span class="drop-zone-prompt">Drag image here.<span></div>';
     var sideBar = $('.column.sidebar');
     $(sideBar).append(imageUploadHtml);
 
@@ -21,16 +26,17 @@ $(function() {
 
 
     function dragenterEvent(ev) {
-        app.view.dropZoneDragEnter();
+        app.view.dropZoneDragEnter(ev.target);
     }
 
     function dragleaveEvent(ev) {
-        app.view.dropZoneDragLeave();
+        app.view.dropZoneDragLeave(ev.target);
     }
 
 
     // drop event callback
     function dropEvent(ev) {
+        app.eleDropZone = ev.target;
         ev.preventDefault();
         var files = ev.dataTransfer.files;
         app.files = [];
@@ -77,5 +83,4 @@ $(function() {
         fileReader.readAsDataURL(app.file);
     }
     
-
 })
