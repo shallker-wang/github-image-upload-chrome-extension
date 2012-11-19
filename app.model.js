@@ -16,7 +16,7 @@
         }
 
         this.addAttachment = function(doc, file, complete, uploadProgress, uploadComplete) {
-            var url = this.couchDB+'/'+doc.id+'/'+file.name+'?rev='+doc.rev;
+            var url = this.couchDB+'/'+doc.id+'/'+app.fileNameMd5+'?rev='+doc.rev;
             return app.xhr({
                 url: url,
                 data: file,

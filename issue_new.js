@@ -55,6 +55,7 @@ $(function() {
     
     function readAndUpload(file) {
         app.file = file;
+        app.fileNameMd5 = hex_md5(app.file.name)+'.'+app.file.name.split('.').pop();
         var fileReader = new FileReader();
         fileReader.onload = function(ev) {
             app.view.hideDropZonePrompt();
@@ -67,7 +68,7 @@ $(function() {
                     app.file,
                     function(evLoad) {
                         var doc = JSON.parse(this.responseText);
-                        var imageURL = app.model.couchDB+'/'+doc.id+'/'+app.file.name;
+                        var imageURL = app.model.couchDB+'/'+doc.id+'/'+app.fileNameMd5;
                         app.view.addImageURLOnNewIssue(imageURL, app.file.name);
                         app.view.dropZoneReset();
                         app.filesUpload();
