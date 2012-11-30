@@ -1,7 +1,8 @@
 (function(){
 
     function model() {
-        this.couchDB = 'http://106.187.36.132:4242/profero';
+        // this.couchDB = 'http://106.187.36.132:4242/profero';
+        this.couchDB = 'http://203.81.25.221:5984/profero_bug';
 
         this.addDocument = function(data, complete) {
             var that = this;
@@ -11,6 +12,9 @@
                 method: 'POST',
                 eventListener: {
                     load: complete
+                },
+                header: {
+                    'Content-type': 'application/json'
                 }
             })
         }
